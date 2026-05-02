@@ -1,0 +1,7 @@
+{
+    "name": "Code Security Auditor",
+    "version": "1.0.0",
+    "description": "A Multi-Agent System for automated code security auditing using local LLMs via Ollama",
+    "ollama_model": "qwen2.5:7b",
+    "ollama_base_url": "http://localhost:11434"
+}
