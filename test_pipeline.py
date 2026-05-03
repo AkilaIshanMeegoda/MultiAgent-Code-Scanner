@@ -12,6 +12,11 @@ try:
 
     print("Imports OK")
 
+    project_path = os.path.abspath("sample_vulnerable_app")
+    user_prompt = "test"
+
+    print(f"Project path: {project_path}")
+
     
 
 except Exception as e:
