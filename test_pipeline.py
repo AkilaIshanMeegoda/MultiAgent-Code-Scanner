@@ -17,6 +17,11 @@ try:
 
     print(f"Project path: {project_path}")
 
+    initial_state = dict(create_initial_state(project_path, user_prompt))
+    initial_state["agent_traces"] = []
+
+    print(f"Initial state keys: {list(initial_state.keys())}")
+
     
 
 except Exception as e:
