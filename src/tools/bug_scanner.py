@@ -1,0 +1,61 @@
+"""
+Bug Detection Tool
+
+Scans source code for common bug patterns, logical errors, and runtime
+risks using regex-based pattern matching.
+"""
+
+from __future__ import annotations
+
+import re
+from typing import Any
+
+from langchain_core.tools import tool
+
+
+# Bug patterns: (pattern, title, category, description, severity)
+_BUG_PATTERNS: list[tuple[str, str, str, str, str]] = [
+    # Division by zero risks
+    (r'\/\s*(?:int|float|len)\s*\(', "Potential Division by Zero",
+     "Runtime Error", "Division using dynamic value without zero-check.", "MEDIUM"),
+    # Bare except
+    (r'except\s*:', "Bare Except Clause",
+     "Error Handling", "Catches all exceptions including KeyboardInterrupt and SystemExit.", "LOW"),
+    # Mutable default arguments
+    (r'def\s+\w+\s*\([^)]*(?:=\s*\[\s*\]|=\s*\{\s*\})', "Mutable Default Argument",
+     "Logical Error", "Using mutable default argument (list/dict); shared across calls.", "MEDIUM"),
+]
+
+
+@tool
+def scan_code_for_bugs(file_contents: dict[str, str]) -> list[dict[str, Any]]:
+    """Scan source code files for common bug patterns and logical errors.
+
+    Args:
+        file_contents: Mapping of file paths to their source code content.
+
+    Returns:
+        A list of detected bug dictionaries with id, title, category,
+        description, file, line_number, code_snippet, and severity.
+    """
+    bugs: list[dict[str, Any]] = []
+    bug_counter = 0
+
+    for filepath, content in file_contents.items():
+        lines = content.splitlines()
+        for line_num, line in enumerate(lines, start=1):
+            for pattern, title, category, description, severity in _BUG_PATTERNS:
+                if re.search(pattern, line, re.IGNORECASE):
+                    bug_counter += 1
+                    bugs.append({
+                        "id": f"BUG-{bug_counter:04d}",
+                        "title": title,
+                        "category": category,
+                        "description": description,
+                        "file": filepath,
+                        "line_number": line_num,
+                        "code_snippet": line.strip()[:200],
+                        "severity": severity,
+                    })
+
+    return bugs
