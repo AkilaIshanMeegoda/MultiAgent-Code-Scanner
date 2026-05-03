@@ -24,6 +24,15 @@ _BUG_PATTERNS: list[tuple[str, str, str, str, str]] = [
     # Mutable default arguments
     (r'def\s+\w+\s*\([^)]*(?:=\s*\[\s*\]|=\s*\{\s*\})', "Mutable Default Argument",
      "Logical Error", "Using mutable default argument (list/dict); shared across calls.", "MEDIUM"),
+    # Unused variable assignment (simple heuristic)
+    (r'^\s+_\s*=\s*.+', "Ignored Return Value",
+     "Code Quality", "Return value explicitly discarded; may indicate missed logic.", "LOW"),
+    # Infinite loop risk
+    (r'while\s+True\s*:', "Potential Infinite Loop",
+     "Runtime Error", "while True without visible break may cause hangs.", "LOW"),
+    # String comparison with is
+    (r'\bis\s+"[^"]*"|\bis\s+\'[^"]*\'', "Identity Comparison on String Literal",
+     "Logical Error", "Using 'is' instead of '==' for string comparison.", "MEDIUM"),
 ]
 
 
