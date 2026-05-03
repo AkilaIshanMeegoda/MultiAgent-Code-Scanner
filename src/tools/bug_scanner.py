@@ -33,6 +33,15 @@ _BUG_PATTERNS: list[tuple[str, str, str, str, str]] = [
     # String comparison with is
     (r'\bis\s+"[^"]*"|\bis\s+\'[^"]*\'', "Identity Comparison on String Literal",
      "Logical Error", "Using 'is' instead of '==' for string comparison.", "MEDIUM"),
+    # Hardcoded file paths
+    (r'open\s*\(\s*["\']\/(?:tmp|etc|var)', "Hardcoded Absolute File Path",
+     "Portability", "Hardcoded absolute path reduces cross-platform portability.", "LOW"),
+    # Missing encoding in open()
+    (r'open\s*\([^)]+\)\s*(?!.*encoding)', "Missing Encoding in open()",
+     "Portability", "File opened without explicit encoding; behaviour varies across platforms.", "LOW"),
+    # Broad type coercion
+    (r'int\s*\(\s*request\.|float\s*\(\s*request\.', "Unguarded Type Coercion of User Input",
+     "Runtime Error", "Type-casting user input without try/except may raise ValueError.", "MEDIUM"),
 ]
 
 
