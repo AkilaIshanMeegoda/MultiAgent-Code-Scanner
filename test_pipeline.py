@@ -27,7 +27,18 @@ try:
 
     print("Starting stream...")
     step_count = 0
-    
+    for step in pipeline.stream(initial_state, stream_mode="updates"):
+        step_count += 1
+        for node_name, node_output in step.items():
+            print(f"  Node '{node_name}' returned status={node_output.get('status', '?')}")
+            traces = node_output.get("agent_traces", [])
+            for t in traces:
+                print(f"    Trace: {t.get('agent_name')} {t.get('status')} - {str(t.get('output_summary',''))[:100]}")
+        if step_count > 10:
+            print("Too many steps, stopping")
+            break
+
+    print(f"\nTotal steps: {step_count}")
 
 except Exception as e:
     print(f"\nERROR: {e}")
