@@ -51,6 +51,12 @@ _BUG_PATTERNS: list[tuple[str, str, str, str, str]] = [
     # TODO/FIXME/HACK markers
     (r'#\s*(?:TODO|FIXME|HACK|XXX)\b', "Unresolved TODO/FIXME Marker",
      "Code Quality", "Code contains unresolved developer notes.", "LOW"),
+    # Empty function body
+    (r'def\s+\w+\s*\([^)]*\)\s*:\s*\n\s+pass\s*$', "Empty Function Body",
+     "Logical Error", "Function does nothing; may be unimplemented.", "LOW"),
+    # Re-raising without context
+    (r'raise\s+\w+\s*\(.*\)\s*$', "Re-raise Without Chaining",
+     "Error Handling", "Consider 'raise ... from err' to preserve traceback context.", "LOW"),
 ]
 
 
