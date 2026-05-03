@@ -22,6 +22,11 @@ try:
 
     print(f"Initial state keys: {list(initial_state.keys())}")
 
+    pipeline = build_pipeline()
+    print("Pipeline built OK")
+
+    print("Starting stream...")
+    step_count = 0
     
 
 except Exception as e:
