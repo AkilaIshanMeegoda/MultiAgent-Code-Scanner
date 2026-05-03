@@ -42,6 +42,15 @@ _BUG_PATTERNS: list[tuple[str, str, str, str, str]] = [
     # Broad type coercion
     (r'int\s*\(\s*request\.|float\s*\(\s*request\.', "Unguarded Type Coercion of User Input",
      "Runtime Error", "Type-casting user input without try/except may raise ValueError.", "MEDIUM"),
+    # Deprecated function usage
+    (r'os\.popen\s*\(', "Use of Deprecated os.popen",
+     "Deprecation", "os.popen is deprecated; prefer subprocess module.", "LOW"),
+    # Global variable mutation
+    (r'^\s*global\s+\w+', "Global Variable Mutation",
+     "Code Quality", "Mutating global state makes code harder to reason about.", "LOW"),
+    # TODO/FIXME/HACK markers
+    (r'#\s*(?:TODO|FIXME|HACK|XXX)\b', "Unresolved TODO/FIXME Marker",
+     "Code Quality", "Code contains unresolved developer notes.", "LOW"),
 ]
 
 
